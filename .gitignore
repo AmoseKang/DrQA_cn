@@ -3,4 +3,4 @@
 *~
 data/
 *.tar.gz
-*.egg-info
+*.egg-info *.sh setup.py requirements.txt img/* .*

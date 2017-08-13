@@ -5,6 +5,10 @@
 # This source code is licensed under the license found in the
 # LICENSE file in the root directory of this source tree.
 """Main DrQA reader training script."""
+"""
+python scripts/reader/train.py --no-cuda true --data-workers 14  --num-epochs 1 --model-dir data/tmp --model-name model --data-dir data/webqa --train-file me_train-processed-zh.txt --dev-file me_valid-processed-zh.txt --dev-json me_valid.json --hidden-size 192 --doc-layers 5 --question-layers 5  --embed-dir data/vector --embedding-file zh200.vec
+"""
+
 
 import argparse
 import torch
