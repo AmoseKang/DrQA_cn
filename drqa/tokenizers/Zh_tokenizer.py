@@ -13,6 +13,8 @@ Serves commands to a java subprocess running the jar. Requires java 8.
 import copy
 import json
 import pexpect
+import unicodedata
+from hanziconv import HanziConv
 
 from .tokenizer import Tokens, Tokenizer
 from . import DEFAULTS
@@ -94,7 +96,7 @@ class ZhTokenizer(Tokenizer):
             return Tokens(data, self.annotators)
 
         # Minor cleanup before tokenizing.
-        clean_text = text.replace('\n', ' ')
+        clean_text = self.normalize(text)
 
         self.corenlp.sendline(clean_text.encode('utf-8'))
         self.corenlp.expect_exact('NLP>', searchwindowsize=100)
@@ -124,3 +126,12 @@ class ZhTokenizer(Tokenizer):
                 tokens[i].get('ner', None)
             ))
         return Tokens(data, self.annotators)
+
+    def normalize(text):
+        toSim = HanziConv.toSimplified(text.replace('\n', ' '))
+        t2 = unicodedata.normalize('NFKC', toSim)
+        table = {ord(f): ord(t) for f, t in zip(
+            u'，。！？【】（）％＃＠＆１２３４５６７８９０',
+            u',.!?[]()%#@&1234567890')}
+        t3 = t2.translate(table)
+        return t3
