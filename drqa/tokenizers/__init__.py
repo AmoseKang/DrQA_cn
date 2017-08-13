@@ -20,7 +20,7 @@ def set_default(key, value):
 from .corenlp_tokenizer import CoreNLPTokenizer
 from .regexp_tokenizer import RegexpTokenizer
 from .simple_tokenizer import SimpleTokenizer
-
+from .Zh_tokenizer import ZhTokenizer
 # Spacy is optional
 try:
     from .spacy_tokenizer import SpacyTokenizer
@@ -37,7 +37,8 @@ def get_class(name):
         return RegexpTokenizer
     if name == 'simple':
         return SimpleTokenizer
-
+    if name == 'zh':
+        return ZhTokenizer
     raise RuntimeError('Invalid tokenizer: %s' % name)
 
 
