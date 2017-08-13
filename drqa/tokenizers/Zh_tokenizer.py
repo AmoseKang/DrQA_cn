@@ -127,7 +127,7 @@ class ZhTokenizer(Tokenizer):
             ))
         return Tokens(data, self.annotators)
 
-    def normalize(text):
+    def normalize(self, text):
         toSim = HanziConv.toSimplified(text.replace('\n', ' '))
         t2 = unicodedata.normalize('NFKC', toSim)
         table = {ord(f): ord(t) for f, t in zip(
