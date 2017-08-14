@@ -60,7 +60,7 @@ class ZhTokenizer(Tokenizer):
         self.corenlp.setecho(False)
         self.corenlp.sendline('stty -icanon')
         self.corenlp.sendline(' '.join(cmd))
-        print(' '.join(cmd))
+        # print(' '.join(cmd))
         self.corenlp.delaybeforesend = 0
         self.corenlp.delayafterread = 0
         self.corenlp.expect_exact('NLP>', searchwindowsize=100)

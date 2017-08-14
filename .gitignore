@@ -3,4 +3,9 @@
 *~
 data/
 *.tar.gz
-*.egg-info *.sh setup.py requirements.txt img/* .*
+*.egg-info 
+*.sh 
+setup.py 
+requirements.txt 
+img/*
+.vscode/*
