@@ -76,6 +76,7 @@ if args.cuda:
 
 examples = []
 qids = []
+answer = []
 with open(args.dataset) as f:
     data = json.load(f)['data']
     for article in data:
@@ -84,6 +85,7 @@ with open(args.dataset) as f:
             for qa in paragraph['qas']:
                 qids.append(qa['id'])
                 examples.append((context, qa['question']))
+                answer.append(qa['answers'])
 
 results = {}
 for i in tqdm(range(0, len(examples), args.batch_size)):
@@ -93,11 +95,15 @@ for i in tqdm(range(0, len(examples), args.batch_size)):
     for j in range(len(predictions)):
         # Official eval expects just a qid --> span
         if args.official:
-            results[qids[i + j]] = predictions[j][0][0]
+            results[qids[i + j]] = {'predictions': predictions[j]
+                                    [0][0], 'answers': answer[i + j]}
 
         # Otherwise we store top N and scores for debugging.
         else:
-            results[qids[i + j]] = [(p[0], float(p[1])) for p in predictions[j]]
+            results[qids[i + j]] = {'predictions': [
+                (p[0], float(p[1])) for p in predictions[j]],
+                 'answers': answer[i + j]}
+
 
 model = os.path.splitext(os.path.basename(args.model or 'default'))[0]
 basename = os.path.splitext(os.path.basename(args.dataset))[0]
