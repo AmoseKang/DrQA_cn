@@ -88,22 +88,42 @@ with open(args.dataset) as f:
                 answer.append(qa['answers'])
 
 results = {}
+accurateIndex = 0
+accuracy = 0
 for i in tqdm(range(0, len(examples), args.batch_size)):
     predictions = predictor.predict_batch(
         examples[i:i + args.batch_size], top_n=args.top_n
     )
+
     for j in range(len(predictions)):
         # Official eval expects just a qid --> span
         if args.official:
             results[qids[i + j]] = {'predictions': predictions[j]
                                     [0][0], 'answers': answer[i + j]}
+            for idx in range(predictions[j][0][0]):
+                if predictions[j][0][0][idx][0] == answer[i + j][idx]['text']:
+                    accuracy = (accuracy * accurateIndex + 1) / \
+                        (accurateIndex + 1)
+                    accurateIndex += 1
+                else:
+                    accuracy = (accuracy * accurateIndex) / \
+                        (accurateIndex + 1)
+                    accurateIndex += 1
 
         # Otherwise we store top N and scores for debugging.
         else:
-            results[qids[i + j]] = {'predictions': [
-                (p[0], float(p[1])) for p in predictions[j]],
-                 'answers': answer[i + j]}
-
+            preds = [(p[0], float(p[1])) for p in predictions[j]]
+            results[qids[i + j]] = {'predictions': preds,
+                                    'answers': answer[i + j]}
+            for idx in range(preds):
+                if preds[idx][0] == answer[i + j][idx]['text']:
+                    accuracy = (accuracy * accurateIndex + 1) / \
+                        (accurateIndex + 1)
+                    accurateIndex += 1
+                else:
+                    accuracy = (accuracy * accurateIndex) / \
+                        (accurateIndex + 1)
+                    accurateIndex += 1
 
 model = os.path.splitext(os.path.basename(args.model or 'default'))[0]
 basename = os.path.splitext(os.path.basename(args.dataset))[0]
@@ -114,3 +134,5 @@ with open(outfile, 'w') as f:
     json.dump(results, f)
 
 logger.info('Total time: %.2f' % (time.time() - t0))
+logger.info('Total items: %s' % accurateIndex)
+logger.info('Accuracy: %s' % accuracy)
