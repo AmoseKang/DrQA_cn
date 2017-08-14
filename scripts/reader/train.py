@@ -6,7 +6,7 @@
 # LICENSE file in the root directory of this source tree.
 """Main DrQA reader training script."""
 """
-python scripts/reader/train.py --no-cuda true --data-workers 14  --num-epochs 1 --model-dir data/tmp --model-name model --data-dir data/webqa --train-file me_train-processed-zh.txt --dev-file me_valid-processed-zh.txt --dev-json me_valid.json --hidden-size 192 --doc-layers 5 --question-layers 5  --embed-dir data/vector --embedding-file zh200.vec
+python scripts/reader/train.py --no-cuda true --data-workers 14  --num-epochs 1 --model-dir data/tmp --model-name model --data-dir data/webqa --train-file me_train-processed-zh.txt --dev-file me_valid-processed-zh.txt --dev-json me_valid.json --hidden-size 192 --doc-layers 5 --question-layers 5  --embed-dir data/vector --embedding-file zh200.vec --official-eval false --indexcheckpoint 500
 """
 
 
@@ -36,6 +36,7 @@ logger = logging.getLogger()
 DATA_DIR = os.path.join(DRQA_DATA, 'datasets')
 MODEL_DIR = '/tmp/drqa-models/'
 EMBED_DIR = os.path.join(DRQA_DATA, 'embeddings')
+
 
 def str2bool(v):
     return v.lower() in ('yes', 'true', 't', '1', 'y')
@@ -94,6 +95,8 @@ def add_train_args(parser):
     save_load = parser.add_argument_group('Saving/Loading')
     save_load.add_argument('--checkpoint', type='bool', default=False,
                            help='Save model + optimizer state after each epoch')
+    save_load.add_argument('--indexcheckpoint', type=int, default=-1,
+                           help='Save model + optimizer state after each item reach')
     save_load.add_argument('--pretrained', type=str, default='',
                            help='Path to a pretrained model to warm-start with')
     save_load.add_argument('--expand-dictionary', type='bool', default=False,
@@ -161,7 +164,8 @@ def set_defaults(args):
 
     # Make sure tune_partial and fix_embeddings are consistent.
     if args.tune_partial > 0 and args.fix_embeddings:
-        logger.warning('WARN: fix_embeddings set to False as tune_partial > 0.')
+        logger.warning(
+            'WARN: fix_embeddings set to False as tune_partial > 0.')
         args.fix_embeddings = False
 
     # Make sure fix_embeddings and embedding_file are consistent
@@ -224,6 +228,11 @@ def train(args, data_loader, model, global_stats):
                         'loss = %.2f | elapsed time = %.2f (s)' %
                         (train_loss.avg, global_stats['timer'].time()))
             train_loss.reset()
+
+        if args.indexcheckpoint != -1 and idx != 0 and idx % args.indexcheckpoint == 0:
+            model.checkpoint(args.model_file + str(idx % args.indexcheckpoint) + 
+            ':' + str(global_stats['epoch']) +  '.checkpoint',
+                             global_stats['epoch'])
 
     logger.info('train: Epoch %d done. Time for epoch = %.2f (s)' %
                 (global_stats['epoch'], epoch_time.time()))
@@ -488,7 +497,8 @@ def main(args):
         validate_unofficial(args, train_loader, model, stats, mode='train')
 
         # Validate unofficial (dev)
-        result = validate_unofficial(args, dev_loader, model, stats, mode='dev')
+        result = validate_unofficial(
+            args, dev_loader, model, stats, mode='dev')
 
         # Validate official
         if args.official_eval:
