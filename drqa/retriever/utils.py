@@ -11,7 +11,7 @@ import unicodedata
 import numpy as np
 import scipy.sparse as sp
 from sklearn.utils import murmurhash3_32
-
+from hanziconv import HanziConv
 
 # ------------------------------------------------------------------------------
 # Sparse matrix saving/loading helpers.
@@ -70,11 +70,22 @@ STOPWORDS = {
     'isn', 'ma', 'mightn', 'mustn', 'needn', 'shan', 'shouldn', 'wasn', 'weren',
     'won', 'wouldn', "'ll", "'re", "'ve", "n't", "'s", "'d", "'m", "''", "``"
 }
+with open('stopword_zh.txt') as f:
+    # load chinese stop word
+    for line in f:
+        STOPWORDS.add(line.replace('\n', ''))
 
 
 def normalize(text):
     """Resolve different type of unicode encodings."""
-    return unicodedata.normalize('NFD', text)
+    # adding Chinese normalization sepcail support
+    toSim = HanziConv.toSimplified(text.replace('\n', ' '))
+    t2 = unicodedata.normalize('NFKC', toSim)
+    table = {ord(f): ord(t) for f, t in zip(
+        u'，。！？【】（）％＃＠＆１２３４５６７８９０',
+        u',.!?[]()%#@&1234567890')}
+    t3 = t2.translate(table)
+    return t3
 
 
 def filter_word(text):

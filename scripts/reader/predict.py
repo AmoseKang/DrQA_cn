@@ -115,8 +115,10 @@ for i in tqdm(range(0, len(examples), args.batch_size)):
             preds = [(p[0], float(p[1])) for p in predictions[j]]
             results[qids[i + j]] = {'predictions': preds,
                                     'answers': answer[i + j]}
-            for idx in range(preds):
-                if preds[idx][0] == answer[i + j][idx]['text']:
+            # print(str({'predictions': preds, 'answers': answer[i + j]}))
+            predCount = 0
+            for pred in preds:
+                if predCount < len(answer[i + j]) and pred[0] == answer[i + j][predCount]['text']:       
                     accuracy = (accuracy * accurateIndex + 1) / \
                         (accurateIndex + 1)
                     accurateIndex += 1
@@ -124,6 +126,8 @@ for i in tqdm(range(0, len(examples), args.batch_size)):
                     accuracy = (accuracy * accurateIndex) / \
                         (accurateIndex + 1)
                     accurateIndex += 1
+                predCount += 1
+                
 
 model = os.path.splitext(os.path.basename(args.model or 'default'))[0]
 basename = os.path.splitext(os.path.basename(args.dataset))[0]

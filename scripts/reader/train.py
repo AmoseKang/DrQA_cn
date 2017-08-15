@@ -6,7 +6,7 @@
 # LICENSE file in the root directory of this source tree.
 """Main DrQA reader training script."""
 """
-python scripts/reader/train.py --no-cuda true --data-workers 14  --num-epochs 1 --model-dir data/tmp --model-name model --data-dir data/webqa --train-file me_train-processed-zh.txt --dev-file me_valid-processed-zh.txt --dev-json me_valid.json --hidden-size 192 --doc-layers 5 --question-layers 5  --embed-dir data/vector --embedding-file zh200.vec --official-eval false --indexcheckpoint 500
+python scripts/reader/train.py --no-cuda true --data-workers 14  --num-epochs 1 --model-dir data/tmp --model-name model --data-dir data/webqa --train-file me_train-processed-zh.txt --dev-file me_valid-processed-zh.txt --dev-json me_valid.json --hidden-size 192 --doc-layers 5 --question-layers 5  --embed-dir data/vector --embedding-file zh200.vec --official-eval false --indexcheckpoint 500 --valid-metric exact_match
 """
 
 
@@ -507,7 +507,7 @@ def main(args):
                                        dev_offsets, dev_texts, dev_answers)
 
         # Save best valid
-        if result[args.valid_metric] > stats['best_valid']:
+        if args.valid_metric in result.keys() and result[args.valid_metric] > stats['best_valid']:
             logger.info('Best valid: %s = %.2f (epoch %d, %d updates)' %
                         (args.valid_metric, result[args.valid_metric],
                          stats['epoch'], model.updates))

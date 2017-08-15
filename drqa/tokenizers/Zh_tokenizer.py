@@ -31,7 +31,7 @@ class ZhTokenizer(Tokenizer):
         """
         # self.classpath = (kwargs.get('classpath') or
         #                   DEFAULTS['corenlp_classpath'])
-        self.classpath = '/home/amose/corenlp/*'
+        self.classpath = '/home/amose/corenlp/*'  # fixme : preset classPath
         self.annotators = copy.deepcopy(kwargs.get('annotators', set()))
         self.mem = kwargs.get('mem', '2g')
         self._launch()
