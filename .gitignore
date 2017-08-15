@@ -1,12 +1,12 @@
 *.pyc
 *.DS_Store
+__pycache__/
 *~
 data/
+.vscode/
 *.tar.gz
 *.egg-info 
 *.sh 
 setup.py 
 requirements.txt 
-img/*
-.vscode/*
-.vscode
+img/

@@ -64,7 +64,7 @@ class ZhTokenizer(Tokenizer):
         self.corenlp.delaybeforesend = 0
         self.corenlp.delayafterread = 0
         self.corenlp.expect_exact('NLP>', searchwindowsize=100)
-        print('[init done]')
+        print('[init tokenizer done]')
 
     @staticmethod
     def _convert(token):
