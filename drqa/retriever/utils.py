@@ -70,7 +70,7 @@ STOPWORDS = {
     'isn', 'ma', 'mightn', 'mustn', 'needn', 'shan', 'shouldn', 'wasn', 'weren',
     'won', 'wouldn', "'ll", "'re", "'ve", "n't", "'s", "'d", "'m", "''", "``"
 }
-with open('stopword_zh.txt') as f:
+with open('drqa/retriever/stopword_zh.txt') as f:
     # load chinese stop word
     for line in f:
         STOPWORDS.add(line.replace('\n', ''))
