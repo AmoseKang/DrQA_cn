@@ -10,3 +10,4 @@ data/
 setup.py 
 requirements.txt 
 img/
+zh_dict.json

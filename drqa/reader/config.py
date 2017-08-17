@@ -66,6 +66,8 @@ def add_model_args(parser):
                         help='Whether to use lemma features')
     detail.add_argument('--use-tf', type='bool', default=True,
                         help='Whether to use term frequency features')
+    detail.add_argument('--use-pinyin', type='bool', default=False,
+                        help='Whether to use pinyin features')
 
     # Optimization details
     optim = parser.add_argument_group('DrQA Reader Optimization')

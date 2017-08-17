@@ -50,6 +50,8 @@ def get_annotators_for_args(args):
         annotators.add('lemma')
     if args.use_ner:
         annotators.add('ner')
+    # if args.use_pinyin:
+    #     annotators.add('pinyin')
     return annotators
 
 

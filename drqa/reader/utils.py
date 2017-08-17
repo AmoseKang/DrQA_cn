@@ -147,7 +147,8 @@ def build_feature_dict(args, examples):
         _insert('in_question_uncased')
         if args.use_lemma:
             _insert('in_question_lemma')
-
+        # if args.use_pinyin:
+        #    _insert('in_question_pinyin')
     # Part of speech tag features
     if args.use_pos:
         for ex in examples:

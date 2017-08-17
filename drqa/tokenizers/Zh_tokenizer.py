@@ -18,6 +18,7 @@ from hanziconv import HanziConv
 
 from .tokenizer import Tokens, Tokenizer
 from . import DEFAULTS
+from .zh_features import trans
 
 
 class ZhTokenizer(Tokenizer):
@@ -35,6 +36,7 @@ class ZhTokenizer(Tokenizer):
         self.annotators = copy.deepcopy(kwargs.get('annotators', set()))
         self.mem = kwargs.get('mem', '2g')
         self._launch()
+        self.trans = trans('drqa/tokenizers/zh_dict.json')
 
     def _launch(self):
         """Start the CoreNLP jar with pexpect."""
@@ -122,9 +124,13 @@ class ZhTokenizer(Tokenizer):
                 (tokens[i]['characterOffsetBegin'],
                  tokens[i]['characterOffsetEnd']),
                 tokens[i].get('pos', None),
+                # self.trans.translate(tokens[i].get('lemma', None),
+                #                     tokens[i].get('pos', None)),
                 tokens[i].get('lemma', None),
-                tokens[i].get('ner', None)
+                tokens[i].get('ner', None),
+                # self.trans.pinyin(text[start_ws: end_ws])
             ))
+            # print(data)
         return Tokens(data, self.annotators)
 
     def normalize(self, text):
