@@ -34,7 +34,7 @@ class ZhTokenizer(Tokenizer):
         #                   DEFAULTS['corenlp_classpath'])
         self.classpath = '/home/amose/corenlp/*'  # fixme : preset classPath
         self.annotators = copy.deepcopy(kwargs.get('annotators', set()))
-        self.mem = kwargs.get('mem', '2g')
+        self.mem = kwargs.get('mem', '1g')
         self._launch()
         self.trans = trans('drqa/tokenizers/zh_dict.json')
 
@@ -124,9 +124,9 @@ class ZhTokenizer(Tokenizer):
                 (tokens[i]['characterOffsetBegin'],
                  tokens[i]['characterOffsetEnd']),
                 tokens[i].get('pos', None),
-                # self.trans.translate(tokens[i].get('lemma', None),
-                #                     tokens[i].get('pos', None)),
-                tokens[i].get('lemma', None),
+                self.trans.translate(tokens[i].get('lemma', None),
+                                     tokens[i].get('pos', None)),
+                #tokens[i].get('lemma', None),
                 tokens[i].get('ner', None),
                 # self.trans.pinyin(text[start_ws: end_ws])
             ))

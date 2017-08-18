@@ -230,8 +230,7 @@ def train(args, data_loader, model, global_stats):
             train_loss.reset()
 
         if args.indexcheckpoint != -1 and idx != 0 and idx % args.indexcheckpoint == 0:
-            checkpointName = args.model_file + str(idx / args.indexcheckpoint) +
-            ':' + str(global_stats['epoch']) + '.checkpoint'
+            checkpointName = args.model_file + str(idx / args.indexcheckpoint) + ':' + str(global_stats['epoch']) + '.checkpoint'
             model.checkpoint(checkpointName, global_stats['epoch'])
             print(['new checkpoint at : %s' % checkpointName])
 

@@ -17,7 +17,6 @@ class Tokens(object):
     POS = 3
     LEMMA = 4
     NER = 5
-    # PINYIN = 6
 
     def __init__(self, data, annotators, opts=None):
         self.data = data
@@ -76,11 +75,6 @@ class Tokens(object):
         if 'ner' not in self.annotators:
             return None
         return [t[self.NER] for t in self.data]
-
-    def pinyin(self):
-        if 'pinyin' not in self.annotators:
-            return None
-        return [t[self.PINYIN] for t in self.data]
 
     def ngrams(self, n=1, uncased=False, filter_fn=None, as_strings=True):
         """Returns a list of all ngrams from length 1 to n.

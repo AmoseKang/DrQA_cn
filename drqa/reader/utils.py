@@ -29,7 +29,7 @@ def load_data(args, filename, skip_no_answer=False):
     """
     # Load JSON lines
     with open(filename) as f:
-        examples = [json.loads(line) for line in f]
+        examples = random.shuffle([json.loads(line) for line in f])
 
     # Make case insensitive?
     if args.uncased_question or args.uncased_doc:
@@ -147,8 +147,7 @@ def build_feature_dict(args, examples):
         _insert('in_question_uncased')
         if args.use_lemma:
             _insert('in_question_lemma')
-        # if args.use_pinyin:
-        #    _insert('in_question_pinyin')
+
     # Part of speech tag features
     if args.use_pos:
         for ex in examples:
