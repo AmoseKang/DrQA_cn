@@ -23,7 +23,7 @@ MODEL_ARCHITECTURE = {
 MODEL_OPTIMIZER = {
     'fix_embeddings', 'optimizer', 'learning_rate', 'momentum', 'weight_decay',
     'rnn_padding', 'dropout_rnn', 'dropout_rnn_output', 'dropout_emb',
-    'max_len', 'grad_clipping', 'tune_partial'
+    'max_len', 'grad_clipping', 'tune_partial', 'use_similarity'
 }
 
 

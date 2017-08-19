@@ -52,9 +52,8 @@ def vectorize(ex, model, single_answer=False):
                 features[i][feature_dict['in_question']] = 1.0
 
             for _w2 in q_words_uncased:
-                
-                #if args.use_lemma and args.use_similarity: # fixme
-                if args.use_lemma:
+                if args.use_lemma and args.use_similarity:
+                    # if args.use_lemma:
                     v1 = embedding[word_dict[ex['document'][i].lower()]]
                     v2 = embedding[word_dict[_w2]]
                     score = cos(v1, v2)
