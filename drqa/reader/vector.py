@@ -8,6 +8,8 @@
 
 from collections import Counter
 import torch
+from ..tokenizers.zh_features import similar, STOPWORDS
+compareHan = similar().compare
 
 
 def vectorize(ex, model, single_answer=False):
@@ -15,7 +17,7 @@ def vectorize(ex, model, single_answer=False):
     args = model.args
     word_dict = model.word_dict
     feature_dict = model.feature_dict
-
+    embedding = model.network.embedding.weight.data
     # Index words
     document = torch.LongTensor([word_dict[w] for w in ex['document']])
     question = torch.LongTensor([word_dict[w] for w in ex['question']])
@@ -28,14 +30,43 @@ def vectorize(ex, model, single_answer=False):
 
     # f_{exact_match}
     if args.use_in_question:
+        def cos(vector1, vector2):
+            dot_product = 0.0
+            normA = 0.0
+            normB = 0.0
+            for a, b in zip(vector1, vector2):
+                dot_product += a * b
+                normA += a**2
+                normB += b**2
+            if normA == 0.0 or normB == 0.0:
+                return None
+            else:
+                return dot_product / ((normA * normB)**0.5)
         q_words_cased = {w for w in ex['question']}
         q_words_uncased = {w.lower() for w in ex['question']}
         q_lemma = {w for w in ex['qlemma']} if args.use_lemma else None
         for i in range(len(ex['document'])):
+            if ex['document'][i] in STOPWORDS:
+                continue
             if ex['document'][i] in q_words_cased:
                 features[i][feature_dict['in_question']] = 1.0
-            if ex['document'][i].lower() in q_words_uncased:
-                features[i][feature_dict['in_question_uncased']] = 1.0
+
+            for _w2 in q_words_uncased:
+                
+                #if args.use_lemma and args.use_similarity: # fixme
+                if args.use_lemma:
+                    v1 = embedding[word_dict[ex['document'][i].lower()]]
+                    v2 = embedding[word_dict[_w2]]
+                    score = cos(v1, v2)
+                    if score > features[i][feature_dict['in_question_lemma']]:
+                        features[i][feature_dict['in_question_lemma']] = score
+                    # print('distance %s and %s is %s' %
+                    #       (ex['document'][i].lower(), _w2, score))
+
+                if compareHan(ex['document'][i].lower(), _w2) == 1.0:
+                    features[i][feature_dict['in_question_uncased']] = 1.0
+                    break
+
             if q_lemma and ex['lemma'][i] in q_lemma:
                 features[i][feature_dict['in_question_lemma']] = 1.0
 

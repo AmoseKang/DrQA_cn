@@ -13,7 +13,7 @@ import unicodedata
 from torch.utils.data import Dataset
 from torch.utils.data.sampler import Sampler
 from .vector import vectorize
-
+from ..tokenizers.zh_features import normalize
 logger = logging.getLogger(__name__)
 
 
@@ -29,7 +29,7 @@ class Dictionary(object):
 
     @staticmethod
     def normalize(token):
-        return unicodedata.normalize('NFD', token)
+        return normalize(token)
 
     def __init__(self):
         self.tok2ind = {self.NULL: 0, self.UNK: 1}

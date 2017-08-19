@@ -13,12 +13,10 @@ Serves commands to a java subprocess running the jar. Requires java 8.
 import copy
 import json
 import pexpect
-import unicodedata
-from hanziconv import HanziConv
 
 from .tokenizer import Tokens, Tokenizer
 from . import DEFAULTS
-from .zh_features import trans
+from .zh_features import trans, normalize
 
 
 class ZhTokenizer(Tokenizer):
@@ -34,7 +32,7 @@ class ZhTokenizer(Tokenizer):
         #                   DEFAULTS['corenlp_classpath'])
         self.classpath = '/home/amose/corenlp/*'  # fixme : preset classPath
         self.annotators = copy.deepcopy(kwargs.get('annotators', set()))
-        self.mem = kwargs.get('mem', '1g')
+        self.mem = kwargs.get('mem', '2g')
         self._launch()
         self.trans = trans('drqa/tokenizers/zh_dict.json')
 
@@ -98,7 +96,7 @@ class ZhTokenizer(Tokenizer):
             return Tokens(data, self.annotators)
 
         # Minor cleanup before tokenizing.
-        clean_text = self.normalize(text)
+        clean_text = normalize(text)
 
         self.corenlp.sendline(clean_text.encode('utf-8'))
         self.corenlp.expect_exact('NLP>', searchwindowsize=100)
@@ -126,18 +124,10 @@ class ZhTokenizer(Tokenizer):
                 tokens[i].get('pos', None),
                 self.trans.translate(tokens[i].get('lemma', None),
                                      tokens[i].get('pos', None)),
-                #tokens[i].get('lemma', None),
+                # tokens[i].get('lemma', None),
                 tokens[i].get('ner', None),
                 # self.trans.pinyin(text[start_ws: end_ws])
             ))
             # print(data)
         return Tokens(data, self.annotators)
 
-    def normalize(self, text):
-        toSim = HanziConv.toSimplified(text.replace('\n', ' '))
-        t2 = unicodedata.normalize('NFKC', toSim)
-        table = {ord(f): ord(t) for f, t in zip(
-            u'，。！？【】（）％＃＠＆１２３４５６７８９０',
-            u',.!?[]()%#@&1234567890')}
-        t3 = t2.translate(table)
-        return t3

@@ -146,6 +146,7 @@ def build_feature_dict(args, examples):
     if args.use_in_question:
         _insert('in_question')
         _insert('in_question_uncased')
+        # this is transfered for chinese pinyin and number verification
         if args.use_lemma:
             _insert('in_question_lemma')
 

@@ -36,6 +36,8 @@ parser.add_argument('--tokenizer', type=str, default=None,
                           "(e.g. 'corenlp')"))
 parser.add_argument('--no-cuda', action='store_true',
                     help='Use CPU only')
+parser.add_argument('--embedding-file', action='store_true',
+                    help='embedding')
 parser.add_argument('--gpu', type=int, default=-1,
                     help='Specify GPU device id to use')
 args = parser.parse_args()
@@ -47,7 +49,8 @@ if args.cuda:
 else:
     logger.info('Running on CPU only.')
 
-predictor = Predictor(args.model, args.tokenizer, num_workers=0)
+predictor = Predictor(args.model, args.tokenizer, num_workers=0,
+                      embedding_file=args.embedding_file)
 if args.cuda:
     predictor.cuda()
 

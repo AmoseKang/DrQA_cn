@@ -15,7 +15,8 @@ logger = logging.getLogger(__name__)
 MODEL_ARCHITECTURE = {
     'model_type', 'embedding_dim', 'hidden_size', 'doc_layers',
     'question_layers', 'rnn_type', 'concat_rnn_layers', 'question_merge',
-    'use_qemb', 'use_in_question', 'use_pos', 'use_ner', 'use_lemma', 'use_tf'
+    'use_qemb', 'use_in_question', 'use_pos', 'use_ner', 'use_lemma', 'use_tf',
+    'use_similarity'
 }
 
 # Index of arguments concerning the model optimizer/training
@@ -57,15 +58,18 @@ def add_model_args(parser):
     detail.add_argument('--use-qemb', type='bool', default=True,
                         help='Whether to use weighted question embeddings')
     detail.add_argument('--use-in-question', type='bool', default=True,
-                        help='Whether to use in_question_* features')
+                        help='Whether to use in_question_* features (including pinyin digit)')
     detail.add_argument('--use-pos', type='bool', default=True,
                         help='Whether to use pos features')
     detail.add_argument('--use-ner', type='bool', default=True,
                         help='Whether to use ner features')
     detail.add_argument('--use-lemma', type='bool', default=True,
-                        help='Whether to use lemma features')
+                        help='Whether to use lemma features (translation in chinese)')
     detail.add_argument('--use-tf', type='bool', default=True,
                         help='Whether to use term frequency features')
+    detail.add_argument('--use-similarity', type='bool', default=True,
+                        help='Whether to use highest similarity between words '
+                        + 'as extra lemma feature (experimental)')
 
     # Optimization details
     optim = parser.add_argument_group('DrQA Reader Optimization')
