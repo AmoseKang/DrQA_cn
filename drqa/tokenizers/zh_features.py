@@ -85,10 +85,13 @@ class trans(object):
         elif use_online:
             pass
         else:
-            return ' '.join(lazy_pinyin(word))
+            return self.pinyin(word)
 
     def pinyin(self, word):
-        return ' '.join(lazy_pinyin(word))
+        if word:
+            return ' '.join(lazy_pinyin(word))
+        else:
+            return word
 
 
 STOPWORDS = {
@@ -142,7 +145,10 @@ class similar(object):
             '[零|一|二|三|四|五|六|七|八|九|十][零|一|二|三|四|五|六|七|八|九|十|百|千|万|亿]+', text)
         for i in ls:
             s = text[i.span()[0]:i.span()[1]]
-            text = text.replace(s, (str)(self.convertChineseDigitsToArabic(s)))
+            try:
+                text = text.replace(s, (str)(self.convertChineseDigitsToArabic(s)))
+            except:
+                return text
         return text
 
     def convertChineseDigitsToArabic(self, chinese_digits):
