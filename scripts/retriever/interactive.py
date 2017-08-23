@@ -7,6 +7,7 @@
 """Interactive mode for the tfidf DrQA retriever module."""
 
 import argparse
+import sqlite3
 import code
 import prettytable
 import logging
@@ -21,11 +22,13 @@ logger.addHandler(console)
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--model', type=str, default=None)
+parser.add_argument('--db', type=str, default=None)
 args = parser.parse_args()
 
 logger.info('Initializing ranker...')
 ranker = retriever.get_class('tfidf')(tfidf_path=args.model)
-
+conn = sqlite3.connect(args.db)
+c = conn.cursor()
 
 # ------------------------------------------------------------------------------
 # Drop in to interactive
@@ -40,8 +43,12 @@ def process(query, k=1):
     for i in range(len(doc_names)):
         table.add_row([i + 1, doc_names[i], '%.5g' % doc_scores[i]])
     print(table)
-
-
+    for i in range(len(doc_names)):
+        print('data of %s' % i)
+        cursor = c.execute('SELECT text from documents WHERE id = "%s"' % doc_names[i])
+        for row in cursor:
+            print("text = " + row[0])
+    
 banner = """
 Interactive TF-IDF DrQA Retriever
 >> process(question, k=1)

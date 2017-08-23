@@ -25,3 +25,4 @@ def set_default(key, value):
 
 
 from .drqa import DrQA
+from .simpleDrQA import SDrQA

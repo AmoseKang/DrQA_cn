@@ -14,6 +14,7 @@ import prettytable
 import time
 
 from drqa.reader import Predictor
+from drqa.pipeline.simpleDrQA import SDrQA
 
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
@@ -31,15 +32,17 @@ logger.addHandler(console)
 parser = argparse.ArgumentParser()
 parser.add_argument('--model', type=str, default=None,
                     help='Path to model to use')
-parser.add_argument('--tokenizer', type=str, default=None,
+parser.add_argument('--tokenizer', type=str, default='zh',
                     help=("String option specifying tokenizer type to use "
                           "(e.g. 'corenlp')"))
 parser.add_argument('--no-cuda', action='store_true',
                     help='Use CPU only')
-parser.add_argument('--embedding-file', default='data/vector/zh200.vec',
+parser.add_argument('--embedding-file', default=None,
                     help='embedding')
 parser.add_argument('--gpu', type=int, default=-1,
                     help='Specify GPU device id to use')
+parser.add_argument('--tfidf-model', type=str, default=None)
+parser.add_argument('--db', type=str, default=None)
 args = parser.parse_args()
 
 args.cuda = not args.no_cuda and torch.cuda.is_available()
@@ -54,19 +57,23 @@ predictor = Predictor(args.model, args.tokenizer, num_workers=0,
 if args.cuda:
     predictor.cuda()
 
-
+drqa = SDrQA(predictor,args.tfidf_model,args.db)
 # ------------------------------------------------------------------------------
 # Drop in to interactive mode
 # ------------------------------------------------------------------------------
 
 
-def process(document, question, candidates=None, top_n=1):
+def process(question, candidates=None, top_n=1):
     t0 = time.time()
-    predictions = predictor.predict(document, question, candidates, top_n)
-    table = prettytable.PrettyTable(['Rank', 'Span', 'Score'])
-    for i, p in enumerate(predictions, 1):
-        table.add_row([i, p[0], p[1]])
-    print(table)
+    answers = drqa.predict(question)
+    for ans in answers:
+        print(ans['answer'])
+        print(ans['answerScore'])
+    # predictions = predictor.predict(document, question, candidates, top_n)
+    # table = prettytable.PrettyTable(['Rank', 'Span', 'Score'])
+    # for i, p in enumerate(predictions, 1):
+    #     table.add_row([i, p[0], p[1]])
+    # print(table)
     print('Time: %.4f' % (time.time() - t0))
 
 

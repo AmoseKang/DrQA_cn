@@ -52,7 +52,7 @@ def vectorize(ex, model, single_answer=False):
                 features[i][feature_dict['in_question']] = 1.0
 
             for _w2 in q_words_uncased:
-                if args.use_lemma and args.use_similarity:
+                if args.use_lemma:  # add use sim : fixme
                     # if args.use_lemma:
                     v1 = embedding[word_dict[ex['document'][i].lower()]]
                     v2 = embedding[word_dict[_w2]]
@@ -103,6 +103,8 @@ def vectorize(ex, model, single_answer=False):
         start = [a[0] for a in ex['answers']]
         end = [a[1] for a in ex['answers']]
 
+    # print(start)
+    # print(end)
     return document, features, question, start, end, ex['id']
 
 

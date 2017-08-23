@@ -67,7 +67,10 @@ DrQA = pipeline.DrQA(
     reader_model=args.reader_model,
     ranker_config={'options': {'tfidf_path': args.retriever_model}},
     db_config={'options': {'db_path': args.doc_db}},
-    tokenizer=args.tokenizer
+    tokenizer=args.tokenizer,
+    num_workers=1,
+    max_loaders=1,
+    embedding_file='data/vector/zh200.vec'
 )
 
 

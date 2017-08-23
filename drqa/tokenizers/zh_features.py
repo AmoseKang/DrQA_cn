@@ -84,8 +84,10 @@ class trans(object):
             return next(iter(d.values()))
         elif use_online:
             pass
+        elif word:
+            return ' '.join(lazy_pinyin(word))
         else:
-            return self.pinyin(word)
+            return word
 
     def pinyin(self, word):
         if word:
