@@ -1,6 +1,7 @@
 import re
 import sqlite3
 from drqa import retriever
+from drqa.retriever.net_retriever import retriver
 
 
 # singel thread simple DrQA agent
@@ -12,10 +13,13 @@ class SDrQA(object):
         self.db = conn.cursor()
         self.filter = filtText('drqa/pipeline/map.txt')
 
-    def predict(self, query, qasTopN=1, docTopN=1):
+    def predict(self, query, qasTopN=1, docTopN=1, fromNet=False):
         query = self.filter.filt(query)
         print('[question after filting : %s ]' % query)
-        doc_names, doc_scores = self.ranker.closest_docs(query, k=docTopN)
+        if fromNet:
+            doc_names, doc_scores = self.retrieveFromNet(query, k=docTopN)
+        else:
+            doc_names, doc_scores = self.ranker.closest_docs(query, k=docTopN)
         ans = []
         for i, doc in enumerate(doc_names):
             cursor = self.db.execute(
@@ -38,6 +42,10 @@ class SDrQA(object):
                         'answerScore': p[1]
                     })
         return ans
+
+    def retrieveFromNet(text, k=1):
+        texts = retriver(text, k)
+        return texts, [1 for i in texts]
 
     def BrealLine(self, text, minLen=64, maxLen=128):
         curr = []

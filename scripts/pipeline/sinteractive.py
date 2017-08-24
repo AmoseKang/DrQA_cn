@@ -59,9 +59,10 @@ drqa = SDrQA(predictor, args.tfidf_model, args.db)
 # ------------------------------------------------------------------------------
 
 
-def process(question, doc_n=1, pred_n=1):
+def process(question, doc_n=1, pred_n=1, net=False):
     t0 = time.time()
-    answers = drqa.predict(question, docTopN=doc_n, qasTopN=pred_n)
+    answers = drqa.predict(question, docTopN=doc_n,
+                           qasTopN=pred_n, fromNet=net)
 
     def sort(a):
         return a['answerScore']
