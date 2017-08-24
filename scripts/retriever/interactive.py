@@ -48,7 +48,7 @@ def process(query, k=1):
         cursor = c.execute('SELECT text from documents WHERE id = "%s"' % doc_names[i])
         for row in cursor:
             print("text = " + row[0])
-    
+
 banner = """
 Interactive TF-IDF DrQA Retriever
 >> process(question, k=1)

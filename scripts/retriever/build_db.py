@@ -16,7 +16,10 @@ import importlib.util
 from multiprocessing import Pool as ProcessPool
 from tqdm import tqdm
 from drqa.retriever import utils
+from drqa.pipeline.simpleDrQA import filtText
 
+
+filt = filtText('drqa/pipeline/map.txt').filt
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
 fmt = logging.Formatter('%(asctime)s: [ %(message)s ]', '%m/%d/%Y %I:%M:%S %p')
@@ -79,8 +82,14 @@ def get_contents(filename):
             if not doc:
                 continue
             # Add the document
-            documents.append((utils.normalize(doc['id']), doc['text']))
+            documents.append(
+                (utils.normalize(doc['id']), extraNormalize(doc['text'])))
     return documents
+
+
+def extraNormalize(text):
+    # normalize and filt multi-spelling text
+    return filt(utils.normalize(text))
 
 
 def store_contents(data_path, save_path, preprocess, num_workers=None):
@@ -102,7 +111,8 @@ def store_contents(data_path, save_path, preprocess, num_workers=None):
     c = conn.cursor()
     c.execute("CREATE TABLE documents (id PRIMARY KEY, text);")
 
-    workers = ProcessPool(num_workers, initializer=init, initargs=(preprocess,))
+    workers = ProcessPool(num_workers, initializer=init,
+                          initargs=(preprocess,))
     files = [f for f in iter_files(data_path)]
     count = 0
     with tqdm(total=len(files)) as pbar:

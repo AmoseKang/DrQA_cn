@@ -49,8 +49,9 @@ class ZhTokenizer(Tokenizer):
         options = ','.join(['untokenizable=noneDelete',
                             'invertible=true'])
         cmd = ['java', '-mx' + self.mem, '-cp', '\'%s\'' % self.classpath,
-               'edu.stanford.nlp.pipeline.StanfordCoreNLP', '-props', 'StanfordCoreNLP-chinese.properties', '-annotators',
-               annotators, '-tokenize.options', options,
+               'edu.stanford.nlp.pipeline.StanfordCoreNLP', '-props',
+               'StanfordCoreNLP-chinese.properties',
+               '-annotators', annotators, '-tokenize.options', options,
                '-outputFormat', 'json', '-prettyPrint', 'false']
         # print(cmd)
         # We use pexpect to keep the subprocess alive and feed it commands.
@@ -130,4 +131,3 @@ class ZhTokenizer(Tokenizer):
             ))
             # print(data)
         return Tokens(data, self.annotators)
-

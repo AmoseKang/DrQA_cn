@@ -1,10 +1,6 @@
 #!/usr/bin/env python3
-# Copyright 2017-present, Facebook, Inc.
-# All rights reserved.
-#
-# This source code is licensed under the license found in the
-# LICENSE file in the root directory of this source tree.
-"""A script to run the DrQA reader model interactively."""
+
+# simple interactive model. only run a single thread process to void trouble
 
 import torch
 import code
@@ -57,17 +53,23 @@ predictor = Predictor(args.model, args.tokenizer, num_workers=0,
 if args.cuda:
     predictor.cuda()
 
-drqa = SDrQA(predictor,args.tfidf_model,args.db)
+drqa = SDrQA(predictor, args.tfidf_model, args.db)
 # ------------------------------------------------------------------------------
 # Drop in to interactive mode
 # ------------------------------------------------------------------------------
 
 
-def process(question, candidates=None, top_n=1):
+def process(question, doc_n=1, pred_n=1):
     t0 = time.time()
-    answers = drqa.predict(question)
+    answers = drqa.predict(question, docTopN=doc_n, qasTopN=pred_n)
+
+    def sort(a):
+        return a['answerScore']
+    answers = sorted(answers, key=sort)
     for ans in answers:
-        print(ans['answer'])
+        print('---------------------------------------------------------')
+        print(ans['text'])
+        print("======== answer :" + ans['answer'])
         print(ans['answerScore'])
     # predictions = predictor.predict(document, question, candidates, top_n)
     # table = prettytable.PrettyTable(['Rank', 'Span', 'Score'])
@@ -79,7 +81,7 @@ def process(question, candidates=None, top_n=1):
 
 banner = """
 DrQA Interactive Document Reader Module
->> process(document, question, candidates=None, top_n=1)
+>> process(question, doc_n=1, pred_n=1):
 >> usage()
 """
 

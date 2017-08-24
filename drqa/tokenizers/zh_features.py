@@ -124,9 +124,9 @@ with open('drqa/retriever/stopword_zh.txt') as f:
 class similar(object):
     def __init__(self):
         self.chs_arabic_map = {u'零': 0, u'一': 1, u'二': 2, u'三': 3, u'四': 4,
-                                    u'五': 5, u'六': 6, u'七': 7, u'八': 8, u'九': 9,
-                                    u'十': 10, u'百': 100, u'千': 10 ** 3, u'万': 10 ** 4,
-                                    u'亿': 10 ** 8}
+                               u'五': 5, u'六': 6, u'七': 7, u'八': 8, u'九': 9,
+                               u'十': 10, u'百': 100, u'千': 10 ** 3, u'万': 10 ** 4,
+                               u'亿': 10 ** 8}
 
     def compare(self, word0, word1):
         # print(word0 + '|' + word1)
@@ -148,7 +148,8 @@ class similar(object):
         for i in ls:
             s = text[i.span()[0]:i.span()[1]]
             try:
-                text = text.replace(s, (str)(self.convertChineseDigitsToArabic(s)))
+                text = text.replace(
+                    s, (str)(self.convertChineseDigitsToArabic(s)))
             except:
                 return text
         return text
