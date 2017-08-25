@@ -39,12 +39,12 @@ class SDrQA(object):
                         'answerScore': p[1]
                     })
             return ans
-        query = self.filter.filt(query)
+        query = self.NormAndFilt(query)
         logger.info('[question after filting : %s ]' % query)
         ans = []
         if netTopN > 0:
             docs = self.retrieveFromNet(query, k=netTopN)
-            logger.info('retreive from net : %s | expect : %s' % (len(docs),netTopN))
+            logger.info('[retreive from net : %s | expect : %s]' % (len(docs),netTopN))
             for i, text in enumerate(docs):
                 ans.extend(process(text))
 
