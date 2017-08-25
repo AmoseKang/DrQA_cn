@@ -71,8 +71,8 @@ def process(question, doc_n=1, pred_n=1, net_n=1):
         print('---------------------------------------------------------')
         print(ans['text'])
         print("======== answer :" + ans['answer'])
-        print(ans['answerScore'])
-        print(ans['contextScore'])
+        print('answer score : ' + ans['answerScore'])
+        print('context score : ' + ans['contextScore'])
     # predictions = predictor.predict(document, question, candidates, top_n)
     # table = prettytable.PrettyTable(['Rank', 'Span', 'Score'])
     # for i, p in enumerate(predictions, 1):

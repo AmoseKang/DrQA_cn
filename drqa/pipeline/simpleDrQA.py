@@ -44,7 +44,7 @@ class SDrQA(object):
         ans = []
         if netTopN > 0:
             docs = self.retrieveFromNet(query, k=netTopN)
-            logger.info('[retreive from net : %s ]' % len(docs))
+            logger.info('retreive from net : %s | expect : %s' % (len(docs),netTopN))
             for i, text in enumerate(docs):
                 ans.extend(process(text))
 

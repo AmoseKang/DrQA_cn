@@ -19,7 +19,7 @@ from drqa.retriever import utils
 from drqa.pipeline.simpleDrQA import filtText
 
 
-filt = filtText('drqa/pipeline/map.txt').filt
+filt = filtText('drqa/features/map.txt').filt
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
 fmt = logging.Formatter('%(asctime)s: [ %(message)s ]', '%m/%d/%Y %I:%M:%S %p')
