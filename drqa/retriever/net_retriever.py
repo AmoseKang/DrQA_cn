@@ -1,3 +1,4 @@
+# encoding='utf-8'
 import json
 import requests
 from urllib.parse import quote
@@ -7,22 +8,25 @@ import re
 import uuid
 import os
 
-def get_hrefs(soup,doc_num):
-    count = 0;
+
+def get_hrefs(soup, doc_num):
+    count = 0
     href = []
     for tr in soup.find_all('h3'):
         if isinstance(tr, bs4.element.Tag):
             tar = tr.a
-            href.append( tar.attrs['href'])
+            href.append(tar.attrs['href'])
             count += 1
         if count >= doc_num:
             break
     return href
 
+
 def get_html(url):
-    res=requests.get(url)
-    res.encoding='utf-8'
+    res = requests.get(url)
+    res.encoding = 'utf-8'
     return res.text
+
 
 def get_content_by_vsb(soup):
     content = []
@@ -31,6 +35,7 @@ def get_content_by_vsb(soup):
             for p in tr.find_all('p'):
                 content.append(p.text)
     return content
+
 
 def get_jsnr_content(soup):
     # 先把名字找出来，这个就很恶心
@@ -57,8 +62,9 @@ def get_jsnr_content(soup):
         if i >= len(title):
             content[len(title)] += name + text[i]
         else:
-            content.append( name + title[i] + text[i])
+            content.append(name + title[i] + text[i])
     return content
+
 
 def get_content_by_p(soup):
     content = []
@@ -68,15 +74,17 @@ def get_content_by_p(soup):
 
     return content
 
+
 def get_content_by_indent(soup):
     content = []
     try:
         for tr in soup.find_all('p', class_=re.compile('indent')):
             if isinstance(tr, bs4.element.Tag):
-                content.append( tr.text)
+                content.append(tr.text)
         return content
     except:
         return []
+
 
 def get_content(link):
     html = get_html(link)
@@ -84,7 +92,7 @@ def get_content(link):
     real_url = requests.get(link).url
     if 'jsnr.jsp' in real_url:
         content = get_jsnr_content(soup)
-        return content.replace('&nbsp;','')
+        return '\n'.join([w for w in content if len(w) > 10])
 
     content = get_content_by_vsb(soup)
     if content == [] or content == '':
@@ -93,7 +101,8 @@ def get_content(link):
         content = get_content_by_p(soup)
     for i in range(len(content)):
         content[i] = content[i].replace('&nbsp;', ' ')
-    return content
+    return '\n'.join([w for w in content if len(w) > 10])
+
 
 def save_content_to_files(content):
     if os.path.isdir('data') is False:
@@ -102,10 +111,11 @@ def save_content_to_files(content):
         if len(w) < 30:
             continue
         id = str(uuid.uuid1())
-        with open('data/'+id+'.txt','w',encoding='utf-8') as f:
-            f.write(json.dumps({'id':id,'text':w},ensure_ascii=False))
+        with open('data/' + id + '.txt', 'w', encoding='utf-8') as f:
+            f.write(json.dumps({'id': id, 'text': w}, ensure_ascii=False))
 
-def retriver(question,doc_num):
+
+def retriver(question, doc_num):
     if question == '':
         return False
 
@@ -116,18 +126,18 @@ def retriver(question,doc_num):
 
     url = 'http://www.baidu.com/s?wd=' + quote(question + ' site:xjtu.edu.cn')
     html = get_html(url)
-    soup = BeautifulSoup(html,'html.parser')
-    hrefs = get_hrefs(soup,doc_num)
+    soup = BeautifulSoup(html, 'html.parser')
+    hrefs = get_hrefs(soup, doc_num)
     content = []
     for link in hrefs:
-        content.extend(get_content(link))
+        content.append(get_content(link))
 
-    save_content_to_files(content)
-    return content
-    # print(content)
-
-
+    # for w in content :
+    #     if len(w)>20:
+    #         print(w)
+    # print([w for w in content if len(w) > 20])
+    return ([w for w in content if len(w) > 20])
 
 
 if __name__ == '__main__':
-    retriver('交大哪年办学',5)
+    retriver('交大哪年办学', 5)

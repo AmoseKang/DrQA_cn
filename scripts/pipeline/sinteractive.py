@@ -53,25 +53,26 @@ predictor = Predictor(args.model, args.tokenizer, num_workers=0,
 if args.cuda:
     predictor.cuda()
 
-drqa = SDrQA(predictor, args.tfidf_model, args.db)
+drqa = SDrQA(predictor, args.tfidf_model, args.db, ebdPath=args.embedding_file)
 # ------------------------------------------------------------------------------
 # Drop in to interactive mode
 # ------------------------------------------------------------------------------
 
 
-def process(question, doc_n=1, pred_n=1, net=False):
+def process(question, doc_n=1, pred_n=1, net_n=1):
     t0 = time.time()
-    answers = drqa.predict(question, docTopN=doc_n,
-                           qasTopN=pred_n, fromNet=net)
+    answers = drqa.predict(question, qasTopN=pred_n,
+                           docTopN=doc_n, netTopN=net_n)
 
     def sort(a):
-        return a['answerScore']
+        return a['answerScore'] * a['contextScore']
     answers = sorted(answers, key=sort)
     for ans in answers:
         print('---------------------------------------------------------')
         print(ans['text'])
         print("======== answer :" + ans['answer'])
         print(ans['answerScore'])
+        print(ans['contextScore'])
     # predictions = predictor.predict(document, question, candidates, top_n)
     # table = prettytable.PrettyTable(['Rank', 'Span', 'Score'])
     # for i, p in enumerate(predictions, 1):

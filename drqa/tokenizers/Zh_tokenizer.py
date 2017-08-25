@@ -34,7 +34,7 @@ class ZhTokenizer(Tokenizer):
         self.annotators = copy.deepcopy(kwargs.get('annotators', set()))
         self.mem = kwargs.get('mem', '2g')
         self._launch()
-        self.trans = trans('drqa/tokenizers/zh_dict.json')
+        self.trans = trans('drqa/features/zh_dict.json')
 
     def _launch(self):
         """Start the CoreNLP jar with pexpect."""
