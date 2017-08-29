@@ -65,14 +65,14 @@ def process(question, doc_n=1, pred_n=1, net_n=1):
                            docTopN=doc_n, netTopN=net_n)
 
     def sort(a):
-        return a['answerScore'] * a['contextScore']
+        return (0.2 + a['answerScore']) * a['contextScore']
     answers = sorted(answers, key=sort)
     for ans in answers:
         print('---------------------------------------------------------')
         print(ans['text'])
         print("======== answer :" + ans['answer'])
-        print('answer score : ' + ans['answerScore'])
-        print('context score : ' + ans['contextScore'])
+        print('answer score : ' + str(ans['answerScore']))
+        print('context score : ' + str(ans['contextScore']))
     # predictions = predictor.predict(document, question, candidates, top_n)
     # table = prettytable.PrettyTable(['Rank', 'Span', 'Score'])
     # for i, p in enumerate(predictions, 1):
