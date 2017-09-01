@@ -68,10 +68,10 @@ class SDrQA(object):
         curr_len = 0
 
         def replace(match):
-            s = match.string
+            s = text[match.start():match.end()]
             return s.replace('.', '$$$')
         text = re.sub('[[0-9]+\.[0-9]+]', replace, text)
-        for split in re.split('[\n+|\.+|\?+|\!+]', text):
+        for split in re.split('[\n+\.+\?+\!+]', text):
             split = split.strip().replace('$$$', '.')
             if len(split) == 0:
                 continue
