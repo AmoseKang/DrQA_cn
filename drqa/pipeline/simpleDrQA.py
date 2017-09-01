@@ -70,7 +70,7 @@ class SDrQA(object):
         def replace(match):
             s = match.string
             return s.replace('.', '$$$')
-        text = re.sub('[[0-9]+\.[0-9]+]')
+        text = re.sub('[[0-9]+\.[0-9]+]', replace, text)
         for split in re.split('[\n+|\.+|\?+|\!+]', text):
             split = split.strip().replace('$$$', '.')
             if len(split) == 0:
