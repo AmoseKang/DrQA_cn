@@ -44,7 +44,8 @@ class SDrQA(object):
         ans = []
         if netTopN > 0:
             docs = self.retrieveFromNet(query, k=netTopN)
-            logger.info('[retreive from net : %s | expect : %s]' % (len(docs),netTopN))
+            logger.info('[retreive from net : %s | expect : %s]' %
+                        (len(docs), netTopN))
             for i, text in enumerate(docs):
                 ans.extend(process(text))
 
@@ -65,8 +66,13 @@ class SDrQA(object):
     def BrealLine(self, text, minLen=64, maxLen=128):
         curr = []
         curr_len = 0
-        for split in re.split('[\n+|[\D\.+|\.+\D]|\?+|\!+]', text):
-            split = split.strip()
+
+        def replace(match):
+            s = match.string
+            return s.replace('.', '$$$')
+        text = re.sub('[[0-9]+\.[0-9]+]')
+        for split in re.split('[\n+|\.+|\?+|\!+]', text):
+            split = split.strip().replace('$$$', '.')
             if len(split) == 0:
                 continue
             # Maybe group paragraphs together until we hit a length limit
