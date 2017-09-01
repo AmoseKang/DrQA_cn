@@ -65,7 +65,7 @@ class SDrQA(object):
     def BrealLine(self, text, minLen=64, maxLen=128):
         curr = []
         curr_len = 0
-        for split in re.split('[\n+|\.+|\?+|\!+]', text):
+        for split in re.split('[\n+|[\D\.+|\.+\D]|\?+|\!+]', text):
             split = split.strip()
             if len(split) == 0:
                 continue
