@@ -48,12 +48,14 @@ if args.cuda:
 else:
     logger.info('Running on CPU only.')
 
+drqa = SDrQA(predictor, args.tfidf_model, args.db, ebdPath=args.embedding_file)
+
 predictor = Predictor(args.model, args.tokenizer, num_workers=0,
                       embedding_file=args.embedding_file)
 if args.cuda:
     predictor.cuda()
 
-drqa = SDrQA(predictor, args.tfidf_model, args.db, ebdPath=args.embedding_file)
+
 # ------------------------------------------------------------------------------
 # Drop in to interactive mode
 # ------------------------------------------------------------------------------
