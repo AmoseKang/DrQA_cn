@@ -9,7 +9,7 @@ import Levenshtein
 
 logger = logging.getLogger(__name__)
 
-# singel thread simple DrQA agent
+# simplesingel thread DrQA agent
 
 
 class SDrQA(object):

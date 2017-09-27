@@ -1,4 +1,6 @@
 # encoding='utf-8'
+# by yuan xin jie
+
 import json
 import requests
 from urllib.parse import quote
@@ -124,7 +126,9 @@ def retriver(question, doc_num):
     elif type(doc_num) == str:
         doc_num = eval(doc_num)
 
-    url = 'http://www.baidu.com/s?wd=' + quote(question + ' site:xjtu.edu.cn')
+    # url = 'http://www.baidu.com/s?wd=' + quote(question + ' site:xjtu.edu.cn')
+    url = 'http://www.baidu.com/s?wd=' + quote(question)
+    # remove target specification
     html = get_html(url)
     soup = BeautifulSoup(html, 'html.parser')
     hrefs = get_hrefs(soup, doc_num)

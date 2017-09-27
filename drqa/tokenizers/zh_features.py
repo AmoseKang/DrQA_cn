@@ -1,5 +1,9 @@
 #!/usr/bin/env python
 # -*- coding:utf-8 -*
+# file witch exports important features for Chinese
+# include translation, normalization, similarty comparation and stopwords
+
+
 import os
 import re
 import json
@@ -73,16 +77,21 @@ class Youdao(object):
 
 
 class trans(object):
+    # translation for Chinese word
     def __init__(self, path):
+        # fixme : there are some bugs while loading dictionary
         self.dict = loadDict(path)
 
     def translate(self, word, pos, use_online=False):
         if self.dict.get(word):
             d = self.dict.get(word)
+            # find if pos tag match dict result
+            # give a random one if no one match
             if d.get(pos.lower()):
                 return d.get(pos.lower())
             return next(iter(d.values()))
         elif use_online:
+            # never use_online so far
             pass
         elif word:
             return ' '.join(lazy_pinyin(word))
@@ -122,6 +131,11 @@ with open('drqa/features/stopword_zh.txt') as f:
 
 
 class similar(object):
+    ''' a very rough method to evaluate the similarity between context and
+    questions. Not productive at all :(
+    # fixme : should be replaced by a complex module
+    ps: this one is also used to get the best position for answers
+    (where is the best show up in context)'''
     def __init__(self):
         self.chs_arabic_map = {u'零': 0, u'一': 1, u'二': 2, u'三': 3, u'四': 4,
                                u'五': 5, u'六': 6, u'七': 7, u'八': 8, u'九': 9,

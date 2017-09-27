@@ -5,6 +5,9 @@
 # This source code is licensed under the license found in the
 # LICENSE file in the root directory of this source tree.
 """Interactive interface to full DrQA pipeline."""
+''' word with original pipline. not working well in my
+context. plz use sinteractive instead'''
+
 
 import torch
 import argparse

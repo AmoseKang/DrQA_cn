@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
-# Copyright 2017-present, Facebook, Inc.
-# All rights reserved.
-#
+
+# modified chinese tokenizer, use core_nlp
 # This source code is licensed under the license found in the
 # LICENSE file in the root directory of this source tree.
 """Simple wrapper around the Stanford CoreNLP pipeline.
@@ -28,9 +27,12 @@ class ZhTokenizer(Tokenizer):
             classpath: Path to the corenlp directory of jars
             mem: Java heap memory
         """
-        # self.classpath = (kwargs.get('classpath') or
-        #                   DEFAULTS['corenlp_classpath'])
-        self.classpath = '/home/amose/corenlp/*'  # fixme : preset classPath
+        # doesn't seem to work ...
+        self.classpath = (kwargs.get('classpath') or
+                          DEFAULTS['corenlp_classpath'])
+
+        # fixme : specific a path by yourself
+        # self.classpath = '/home/amose/corenlp/*'  # fixme : preset classPath
         self.annotators = copy.deepcopy(kwargs.get('annotators', set()))
         self.mem = kwargs.get('mem', '2g')
         self._launch()
@@ -123,6 +125,7 @@ class ZhTokenizer(Tokenizer):
                 (tokens[i]['characterOffsetBegin'],
                  tokens[i]['characterOffsetEnd']),
                 tokens[i].get('pos', None),
+                # lemma : translation or pinyin
                 self.trans.translate(tokens[i].get('lemma', None),
                                      tokens[i].get('pos', None)),
                 # tokens[i].get('lemma', None),

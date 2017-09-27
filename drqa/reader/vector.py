@@ -52,21 +52,22 @@ def vectorize(ex, model, single_answer=False):
                 features[i][feature_dict['in_question']] = 1.0
 
             for _w2 in q_words_uncased:
-                if args.use_lemma:  # add use sim : fixme
-                    # if args.use_lemma:
-                    v1 = embedding[word_dict[ex['document'][i].lower()]]
-                    v2 = embedding[word_dict[_w2]]
-                    score = cos(v1, v2)
-                    if score > features[i][feature_dict['in_question_lemma']]:
-                        features[i][feature_dict['in_question_lemma']] = score
-                    # print('distance %s and %s is %s' %
-                    #       (ex['document'][i].lower(), _w2, score))
+                # abandoned function : use lowest distance bewtween question
+                # and answer as lemma.
+                # if args.use_lemma:  
+                #     # if args.use_lemma:
+                #     v1 = embedding[word_dict[ex['document'][i].lower()]]
+                #     v2 = embedding[word_dict[_w2]]
+                #     score = cos(v1, v2)
+                #     if score > features[i][feature_dict['in_question_lemma']]:
+                #         features[i][feature_dict['in_question_lemma']] = score
 
                 if compareHan(ex['document'][i].lower(), _w2) == 1.0:
                     features[i][feature_dict['in_question_uncased']] = 1.0
                     break
 
             if q_lemma and ex['lemma'][i] in q_lemma:
+                # lemma in Chinese is defined (replaced) as English translation
                 features[i][feature_dict['in_question_lemma']] = 1.0
 
     # f_{token} (POS)

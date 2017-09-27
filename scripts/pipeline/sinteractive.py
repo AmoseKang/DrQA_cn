@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-# simple interactive model. only run a single thread process to void trouble
+# simple interactive model. only run a single thread process to void troubles
 
 import torch
 import code
@@ -53,6 +53,7 @@ predictor = Predictor(args.model, args.tokenizer, num_workers=0,
 if args.cuda:
     predictor.cuda()
 
+# maybe a different embedding to save memory
 drqa = SDrQA(predictor, args.tfidf_model, args.db, ebdPath=args.embedding_file)
 # ------------------------------------------------------------------------------
 # Drop in to interactive mode
@@ -83,7 +84,10 @@ def process(question, doc_n=1, pred_n=1, net_n=1):
 
 banner = """
 DrQA Interactive Document Reader Module
->> process(question, doc_n=1, pred_n=1):
+>> process(question, doc_n=1, pred_n=1, net_n=1):
+    doc_n: doc number in database
+    pred_n: answer number for every context
+    net_n: doc number in search engine
 >> usage()
 """
 
