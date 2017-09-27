@@ -5,7 +5,7 @@ This is a modified version of facebook [DrQA](https://github.com/facebookresearc
 
 ## Installation
 This is a modified version of facebook [DrQA](https://github.com/facebookresearch/DrQA) module. This module is for study only.
-To install this module, please install pytorch according to [pytorch.org](http://pytorch.org/)and run the setup.py in python3 environment. (3.5, 3.6 both works well) If I missed some requrements, please just install with pip. Then install corenlp with Chinese package according to [CoreNLP offical](https://stanfordnlp.github.io/CoreNLP/), you may specific classpath in environment or in file `drqa\tokenizers\Zh_tokenizer.py`. Then you may dowload vectors and training sets to start your work.
+To install this module, please install pytorch according to [pytorch.org](http://pytorch.org/)and run the setup.py in python3 environment. (3.5, 3.6 both works well) If I missed some requirements, please just install with pip. Then install corenlp with Chinese package according to [CoreNLP offical](https://stanfordnlp.github.io/CoreNLP/), you may specific classpath in environment or in file `drqa\tokenizers\Zh_tokenizer.py`. Then you may download vectors and training sets to start your work.
 
 ## Structures
     /data : stores all the data  
@@ -42,10 +42,10 @@ Includes function for various Chinese transformation :
 2. Chinese to pinyin
 3. Chinese number to number
 4. SBC case to DBC case
-6. common sybol transformation
+6. common symbol transformation
 
-The module embbed with common words mapping. (abbreviation <-> full spell, etc.)    
-This module provide a simple context scoring function for better answer ranking.  
+The module embed with common words mapping. (abbreviation <-> full spell, etc.)    
+This module provides a simple context scoring function for better answer ranking.  
 Provide simple context retriever. (worked with baidu search engine)
 Provide parsed and tested training set (based on WebQA) and word embedding (60 dimension and 200 dimension).
 
