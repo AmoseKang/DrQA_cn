@@ -13,8 +13,8 @@ This is a modified version of facebook [DrQA](https://github.com/facebookresearc
 
 ## Installation
 This is a modified version of facebook [DrQA](https://github.com/facebookresearch/DrQA) module. This module is for study only.
-To install this module, please install pytorch according to [pytorch.org](http://pytorch.org/)and run the setup.py in python3 environment. (3.5, 3.6 both works well) (the setup may cover the facebook DrQA) If I missed some requirements, please just install with pip. Then install corenlp with Chinese package according to [CoreNLP offical](https://stanfordnlp.github.io/CoreNLP/), you may specific classpath in environment or in file `drqa\tokenizers\Zh_tokenizer.py`. Then you may download vectors and training sets to start your work.  
-Download link : [Data](https://pan.baidu.com/s/1geMDxMN), secret: 232d  
+To install this module, please install pytorch according to [pytorch.org](http://pytorch.org/) and run the setup.py in python3 environment. (3.5, 3.6 both works well) (the setup may cover the facebook DrQA) If I missed some requirements, please just install with pip. Then install corenlp with Chinese package according to [CoreNLP offical](https://stanfordnlp.github.io/CoreNLP/), you may specific classpath in environment or in file `drqa\tokenizers\Zh_tokenizer.py`. Then you may download vectors and training sets to start your work.  
+Download link : [Data](https://pan.baidu.com/s/1geMDxMN) , secret: 232d  
 Merge drqa folder with original folder, the file contains common data file and zh_dict.json for Chinese_English translation.
 
 ## Structures
