@@ -35,8 +35,9 @@ Merge drqa folder with original folder, the file contains common data file and z
             ...
             net_retriever.py : simply retrieve context (search) in the search engine (baidu) and use results as context
         /tokenizers : tokenizer features
-            /Zh_tokenizer.py : corenlp chinese
+            /Zh_tokenizer.py : corenlp chinese (use tag '--tokenizer zh' to specific)
             /zh_features.py : common chinese features
+            ...
     /scripts : common command line methold
         ...
         /pipline
@@ -83,7 +84,7 @@ answer score : 0.0819935
 context score : 9.164698700898501
 Time: 12.1489
 
-Training with WebQA training dataset, the code runs a 65% conplete match rate in valiation set.  
+Training with WebQA training dataset, the code runs a 65% exact match rate in valiation set.  
 The result of retriever module or pipline is not tested. (our document set is not complete at all and retriever module seems working badly) The procession for context (retrieved data) is vital in final performance. 
 
 
