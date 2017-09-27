@@ -38,17 +38,18 @@ Common files in the project is not mentioned, please check with facebook DrQA.
 ## Features
 Please check facebook module for designing features.  
 As a Chinese implementation of original module, this project supported full Chinese support with full Chinese linguistic tags. Chinese Lemma tag is replaced with English translation. All the expression will be parsed through Chinese normalization. (symbol, simp and trad)  
-Includes function for various Chinese transformation :
+Includes function for various Chinese features transformation :
 1. simplified to traditional
 2. Chinese to pinyin
 3. Chinese number to number
 4. SBC case to DBC case
 6. common symbol transformation
 
-The module embed with common words mapping. (abbreviation <-> full spell, etc.)    
+The module embed with common words mapping. (abbreviation <-> full spelling, etc.)    
 This module provides a simple context scoring function for better answer ranking.  
-Provide simple context retriever. (worked with baidu search engine)
+Provide simple context retriever. (worked with baidu search engine)   
 Provide parsed and tested training set (based on WebQA) and word embedding (60 dimension and 200 dimension).
+Provide with testing module.
 
 
 ## Result
