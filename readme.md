@@ -1,7 +1,7 @@
 # DrQA Chinese implementation
 
 ## Introduction
-This is a modified version of facebook [DrQA](https://github.com/facebookresearch/DrQA) module which supports Chinese language. The git repo is for study only. This module can be used to answer question for any specific context. The initial optimization is targeting to area of specific university. This project is not fully tested nor fully complete.
+This is a modified version of facebook [DrQA](https://github.com/facebookresearch/DrQA) module which supports Chinese language. The git repo is for study only. This module can be used to answer question for any specific context. The initial optimization is targeting to area of specific university. This project is not fully tested nor fully complete.Online retriever using baidu service is broken.
 
 ## DrQA Introduction 
 >DrQA is a system for reading comprehension applied to open-domain question answering. In particular, DrQA is targeted at the task of "machine reading at scale" (MRS). In this setting, we are searching for an answer to a question in a potentially very large corpus of unstructured documents (that may not be redundant). Thus the system has to combine the challenges of document retrieval (finding the relevant documents) with that of machine comprehension of text (identifying the answers from those documents).
